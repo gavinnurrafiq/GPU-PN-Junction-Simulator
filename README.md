@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="asset/2f2827c8-aaf9-4e25-b9e3-3da69832d25a.png" alt="GPU PN Junction Simulator" width="900">
+</p>
+
 # GPU PN Junction Simulator
 
 A 1D semiconductor PN junction simulator written in **C++ and SYCL**, designed to execute numerical calculations on a GPU using the **Intel oneAPI DPC++/C++ Compiler (`icpx`)**.
@@ -44,8 +48,6 @@ The primary target for this project is an **Intel GPU**, such as:
 
 A compatible and sufficiently recent Intel GPU driver is required when running SYCL workloads on Intel GPUs.
 
-Intel's documentation recommends installing the latest Intel GPU driver when targeting an Intel GPU.
-
 ---
 
 ## Operating System
@@ -73,13 +75,11 @@ DPC++
 Intel SYCL runtime
 ```
 
-The official Intel compiler download page is:
+Official download:
 
-[Intel oneAPI DPC++/C++ Compiler](https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compiler-download.html?utm_source=chatgpt.com)
+https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compiler-download.html
 
-The current Intel compiler release page lists version 2026.1.1.
-
-You can install the standalone DPC++/C++ Compiler or install the Intel oneAPI Toolkit.
+You can install the standalone DPC++/C++ Compiler or the Intel oneAPI Toolkit.
 
 ---
 
@@ -91,9 +91,9 @@ On Windows, install Visual Studio with:
 Desktop development with C++
 ```
 
-Microsoft C++ support is required for full functionality with the Intel compiler and Visual Studio integration. Intel's Windows setup documentation lists Visual Studio 2022 and 2019 among supported versions in its corresponding guide.
+The C++ development components are required for the Windows compiler environment.
 
-Visual Studio is not necessarily required as the editor for this project, but its C++ development components are important for the Windows compiler environment.
+Visual Studio is not required as the editor for this project.
 
 ---
 
@@ -101,23 +101,19 @@ Visual Studio is not necessarily required as the editor for this project, but it
 
 If the program is intended to execute on an Intel GPU, install the appropriate Intel graphics driver.
 
-Verify that Windows recognizes the GPU before running the simulator.
-
-For an Intel Arc GPU, for example:
+For example:
 
 ```text
 Intel Arc B580
 ```
 
-should appear correctly in Windows Device Manager.
+should be correctly detected by Windows.
 
 ---
 
 # 5. Initializing the oneAPI Environment
 
 The `icpx` command may not be available from a normal PowerShell or Command Prompt until the oneAPI environment has been initialized.
-
-Intel provides `setvars.bat` for configuring the required environment variables.
 
 The default installation location is typically:
 
@@ -151,8 +147,6 @@ icpx --version
 
 A successful installation should display information about the Intel oneAPI DPC++/C++ Compiler.
 
-Intel's Windows documentation notes that the oneAPI compiler command-line environment normally initializes the required environment variables automatically.
-
 ---
 
 # 7. Manual Environment Initialization
@@ -177,27 +171,23 @@ You can also check:
 set SETVARS_COMPLETED
 ```
 
-The expected result is:
+Expected:
 
 ```text
 SETVARS_COMPLETED=1
 ```
 
-The `setvars.bat` script initializes the environment variables for the installed oneAPI components.
-
 ---
 
 # 8. PowerShell
 
-If you normally use PowerShell, you can launch a PowerShell environment from the initialized oneAPI environment.
-
-For example:
+If you normally use PowerShell, launch a PowerShell environment from the initialized oneAPI environment:
 
 ```cmd
 cmd.exe /K ""C:\Program Files (x86)\Intel\oneAPI\setvars.bat" && powershell"
 ```
 
-Then verify:
+Then:
 
 ```powershell
 icpx --version
@@ -205,17 +195,15 @@ icpx --version
 
 ---
 
-# 9. Verify SYCL Compiler
+# 9. Verify SYCL
 
-Run:
+Create:
 
-```powershell
-icpx --version
+```text
+test_sycl.cpp
 ```
 
-Then verify the compiler can process SYCL.
-
-Create a simple test file:
+with:
 
 ```cpp
 #include <sycl/sycl.hpp>
@@ -235,12 +223,6 @@ int main()
 }
 ```
 
-Save it as:
-
-```text
-test_sycl.cpp
-```
-
 Compile:
 
 ```powershell
@@ -253,29 +235,19 @@ Run:
 .\test_sycl.exe
 ```
 
-If everything is configured correctly, the program should print the selected GPU.
-
-Intel documents `-fsycl` as the option that enables SYCL compilation.
+The program should report the selected GPU.
 
 ---
 
 # 10. Compile the PN Junction Simulator
 
-Navigate to the directory containing the source code.
-
-For example:
+Navigate to the project directory:
 
 ```powershell
 cd C:\Users\Admin\Documents
 ```
 
-Assuming the source file is:
-
-```text
-pnjunction.cpp
-```
-
-compile with:
+Compile:
 
 ```powershell
 icpx -fsycl pnjunction.cpp -o pnjunction.exe
@@ -287,15 +259,7 @@ The important option is:
 -fsycl
 ```
 
-Without it, the source is not compiled as a SYCL application.
-
-Intel documents the same compilation pattern:
-
-```text
-icpx -fsycl hello-world.cpp
-```
-
-for SYCL C++ applications.
+This enables SYCL compilation.
 
 ---
 
@@ -307,7 +271,7 @@ After successful compilation:
 .\pnjunction.exe
 ```
 
-Expected output will look approximately like:
+Example output:
 
 ```text
 ========================================
@@ -319,7 +283,6 @@ Device size : 2 um
 Temperature : 300 K
 Na          : 1e+17 cm^-3
 Nd          : 1e+17 cm^-3
-dx          : ...
 
 GPU: Intel(R) Arc(TM) B580 Graphics
 
@@ -329,8 +292,6 @@ Simulation finished.
 Results saved to pn_junction.csv
 ========================================
 ```
-
-The exact output depends on the GPU, compiler version, runtime, and solver behavior.
 
 ---
 
@@ -350,17 +311,7 @@ potential_V
 electric_field_V_per_m
 ```
 
-Example:
-
-```csv
-x_m,potential_V,electric_field_V_per_m
-0.0,...
-1.0e-11,...
-2.0e-11,...
-...
-```
-
-The data can be opened using:
+The data can be opened with:
 
 * Microsoft Excel
 * LibreOffice Calc
@@ -368,7 +319,7 @@ The data can be opened using:
 * MATLAB
 * GNU Octave
 * Origin
-* other numerical-analysis software
+* Other numerical-analysis software
 
 ---
 
@@ -398,19 +349,17 @@ The Poisson equation is:
 d²V/dx² = -rho/epsilon
 ```
 
-The electric field is obtained from:
+The electric field is:
 
 ```text
 E = -dV/dx
 ```
 
-The current implementation uses Boltzmann-like carrier expressions for `n` and `p`.
+The current implementation uses simplified Boltzmann-like carrier expressions for `n` and `p`.
 
 ---
 
 # 14. Default Parameters
-
-The current source uses approximately:
 
 ```text
 Temperature:
@@ -451,17 +400,17 @@ with the junction positioned approximately at the center of the simulation domai
 
 The simulation divides the semiconductor into many spatial points.
 
-For example:
+The default configuration uses:
 
 ```text
 N = 200,000
 ```
 
-means that the device is represented by 200,000 grid points.
+grid points.
 
-Many calculations for these points are independent and therefore suitable for parallel execution.
+Many calculations over these points can be performed independently, making them suitable for GPU parallelization.
 
-SYCL allows these calculations to be expressed using kernels such as:
+SYCL expresses these calculations using kernels such as:
 
 ```cpp
 queue.submit([&](sycl::handler& h)
@@ -493,44 +442,26 @@ CPU
  Parallel numerical calculation
 ```
 
-This project is therefore also an experiment in **GPU-accelerated computational physics**.
+This makes the project both a **semiconductor physics simulation** and an experiment in **GPU-accelerated computational physics**.
 
 ---
 
 # 16. Project Structure
 
-A minimal version of the project can look like:
+A minimal project:
 
 ```text
 PNJunction-GPU/
+│
+├── asset/
+│   └── 2f2827c8-aaf9-4e25-b9e3-3da69832d25a.png
 │
 ├── pnjunction.cpp
 ├── README.md
-│
 └── pn_junction.csv
 ```
 
-The CSV file is generated after running the program and does not have to be committed to GitHub unless desired.
-
-A more advanced version may eventually use:
-
-```text
-PNJunction-GPU/
-│
-├── include/
-│   ├── PNJunction.hpp
-│   └── GPUSolver.hpp
-│
-├── src/
-│   ├── PNJunction.cpp
-│   ├── GPUSolver.cpp
-│   └── main.cpp
-│
-├── results/
-│
-├── README.md
-└── CMakeLists.txt
-```
+`pn_junction.csv` is generated after running the program and does not need to be committed to GitHub unless desired.
 
 ---
 
@@ -544,29 +475,19 @@ Example:
 fatal error: sycl/sycl.hpp: No such file or directory
 ```
 
-This usually means the source is being compiled with a compiler/environment that cannot locate the SYCL headers.
-
-Do not compile with:
-
-```text
-g++
-```
-
-for this project.
-
-Use:
+Make sure you are using:
 
 ```text
 icpx
 ```
 
-and:
+rather than:
 
 ```text
--fsycl
+g++
 ```
 
-Example:
+Compile with:
 
 ```powershell
 icpx -fsycl pnjunction.cpp -o pnjunction.exe
@@ -578,19 +499,17 @@ Also make sure the oneAPI environment has been initialized.
 
 ## `icpx is not recognized`
 
-Example:
-
-```text
-'icpx' is not recognized...
-```
-
 Initialize oneAPI:
 
 ```cmd
 "C:\Program Files (x86)\Intel\oneAPI\setvars.bat"
 ```
 
-or open the Intel oneAPI Command Prompt.
+or open:
+
+```text
+Intel oneAPI Command Prompt
+```
 
 Then:
 
@@ -600,15 +519,36 @@ icpx --version
 
 ---
 
+## `get_host_access` compilation error
+
+If using a newer SYCL implementation and the compiler reports an error around:
+
+```cpp
+get_host_access<access::mode::read>()
+```
+
+use a `sycl::host_accessor` instead:
+
+```cpp
+sycl::host_accessor Vnew_host(
+    Vnew_buf,
+    sycl::read_only
+);
+```
+
+The same approach should be used for other host-side buffer reads.
+
+---
+
 ## GPU is not detected
 
-If the application fails to find a GPU, check:
+Check:
 
 1. Intel GPU driver
-2. Intel GPU visibility in Windows
+2. GPU visibility in Windows
 3. oneAPI installation
 4. SYCL runtime
-5. selected SYCL device
+5. SYCL device selection
 
 A simple test:
 
@@ -620,17 +560,21 @@ std::cout
        .get_info<sycl::info::device::name>();
 ```
 
-If the GPU selector cannot find an appropriate device, the issue is likely environmental rather than related to the PN junction equations.
-
 ---
 
-# 18. Important Numerical / Physical Limitations
+# 18. Numerical and Physical Limitations
 
-This project is intended primarily for **education, experimentation, and GPU programming research**.
+This project is intended primarily for:
+
+* education
+* experimentation
+* computational physics
+* GPU programming
+* semiconductor physics study
 
 The current implementation is **not a production TCAD simulator**.
 
-Important limitations include:
+Current limitations include:
 
 * simplified carrier statistics
 * simplified equilibrium assumptions
@@ -641,12 +585,12 @@ Important limitations include:
 * no generation model
 * no Fermi-Dirac statistics
 * no quantum effects
-* no temperature-dependent material model
+* no detailed temperature-dependent material model
 * 1D geometry only
 * simplified numerical solver
 * no rigorous validation against commercial TCAD software
 
-Therefore, numerical results should not be interpreted as experimentally validated semiconductor-device predictions.
+Numerical results should therefore not be interpreted as experimentally validated semiconductor-device predictions.
 
 ---
 
@@ -675,7 +619,7 @@ T  = 300 K
 
 the analytical result can be used as a reference for validating the numerical solver.
 
-Future versions should compare:
+Future validation should compare:
 
 ```text
 Analytical solution
@@ -689,25 +633,23 @@ GPU numerical solution
 
 # 20. Future Development
 
-Possible extensions include:
-
-### Semiconductor physics
+## Semiconductor Physics
 
 * Depletion approximation
 * Built-in potential
 * Debye length
-* depletion width
-* carrier concentration
+* Depletion width
+* Carrier concentration
 * Fermi level
-* band diagrams
+* Band diagrams
 * Shockley diode equation
-* drift-diffusion
-* continuity equations
-* recombination
-* generation
-* temperature dependence
+* Drift-diffusion
+* Continuity equations
+* Recombination
+* Generation
+* Temperature dependence
 
-### Device simulation
+## Device Simulation
 
 ```text
 PN Junction
@@ -721,21 +663,21 @@ MOSFET
 BJT
 ```
 
-### GPU computing
+## GPU Computing
 
-* optimized SYCL kernels
+* Optimized SYCL kernels
 * GPU/CPU benchmarking
 * Conjugate Gradient solver
-* multigrid methods
+* Multigrid methods
 * 2D simulation
 * 3D simulation
-* memory optimization
-* mixed precision
+* Memory optimization
+* Mixed precision
 * GPU profiling
 
-### Visualization
+## Visualization
 
-The CSV output can eventually be connected to a visualization interface:
+Future versions can visualize:
 
 ```text
 Potential V(x)
@@ -749,21 +691,21 @@ Charge density rho(x)
 
 # 21. Example Workflow
 
-Complete workflow on Windows:
+Complete Windows workflow:
 
 ```cmd
-:: 1. Open Intel oneAPI Command Prompt
+:: Open Intel oneAPI Command Prompt
 
-:: 2. Check compiler
+:: Check compiler
 icpx --version
 
-:: 3. Enter project directory
+:: Enter project directory
 cd /d C:\Users\Admin\Documents
 
-:: 4. Compile
+:: Compile
 icpx -fsycl pnjunction.cpp -o pnjunction.exe
 
-:: 5. Run
+:: Run
 pnjunction.exe
 ```
 
@@ -796,16 +738,13 @@ if the project is intended to use the MIT License.
 # 23. References
 
 * Intel oneAPI DPC++/C++ Compiler
-  [Official Intel DPC++/C++ Compiler page](https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compiler-download.html?utm_source=chatgpt.com)
+  https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compiler-download.html
 
-* Intel oneAPI DPC++/C++ Compiler — Get Started on Windows
-  [Intel Windows Get Started Guide](https://www.intel.com/content/www/us/en/docs/dpcpp-cpp-compiler/get-started-guide/2025-2/get-started-on-windows.html?utm_source=chatgpt.com)
-
-* Intel oneAPI Compiler Documentation
-  [Intel DPC++/C++ Compiler Developer Guide and Reference](https://www.intel.com/content/www/us/en/docs/dpcpp-cpp-compiler/developer-guide-reference/2026-0/use-the-intel-oneapi-dpc-c-compiler.html?utm_source=chatgpt.com)
+* Intel oneAPI Documentation
+  https://www.intel.com/content/www/us/en/developer/tools/oneapi.html
 
 * SYCL Specification
-  [Khronos SYCL Reference](https://registry.khronos.org/SYCL/?utm_source=chatgpt.com)
+  https://registry.khronos.org/SYCL/
 
 ---
 
